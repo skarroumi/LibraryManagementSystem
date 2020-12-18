@@ -8,23 +8,22 @@ const expressLayouts = require('express-ejs-layouts')
 app.set('view engine', 'ejs')
 app.set('views', __dirname + '/views')
 app.set('layout', 'layouts/layout')
-app.use(expressLayouts)
+app.use(expressLayouts) 
 app.use(express.static('public'))
 
-app.listen(process.env.PORT || 8080)
+const PORT = process.env.PORT || 8080;
+app.listen(PORT, console.log(`Server started on port ${PORT}`))
 
+//DB Connection
+require('./config/sequelizeModule')
 
-//Connection to the Database
-
-const mongoose = require('mongoose')
-mongoose.connect(process.env.DATABASE_URL, {
-    useNewUrlParser: true
-})
-const database = mongoose.connection
-database.on('error', error => console.error(error))
-database.once('open', () => console.log('Connected'))
-
-
-
-const indexRouter = require('./controllers/index')
+const indexRouter = require('./routes/index')
 app.use('/', indexRouter)
+const bookRouter = require('./routes/books')
+app.use('/books', bookRouter)
+const requestRouter = require('./routes/requests')
+app.use('/requests', requestRouter)
+const userRouter = require('./routes/users')
+app.use('/users', userRouter)
+
+
