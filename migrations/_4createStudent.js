@@ -11,10 +11,15 @@ module.exports = {
   NameSt: Sequelize.STRING(50),
   DivisionSt: Sequelize.STRING(50),
   EmailSt: Sequelize.STRING(50),
-  PasswordSt: Sequelize.STRING(50),
+  PasswordSt: Sequelize.STRING(200),
+  AccessStatusSt: {
+    type: Sequelize.BOOLEAN,
+    allowNull: false,
+    defaultValue: true,
+},
   createdAt: Sequelize.DATE,
   updatedAt: Sequelize.DATE,
-   })
+   }, { freezeTableName: true })
   },
 
   down: async (queryInterface, Sequelize) => {

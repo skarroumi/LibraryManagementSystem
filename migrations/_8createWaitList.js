@@ -20,7 +20,7 @@ module.exports = {
     },
   createdAt: Sequelize.DATE,
   updatedAt: Sequelize.DATE,
-   })
+   }, { freezeTableName: true })
   },
 
   down: async (queryInterface, Sequelize) => {

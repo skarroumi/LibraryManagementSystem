@@ -1,4 +1,5 @@
 const Sequelize = require('sequelize')
+const {sequelize} = require('../config/sequelizeModule')
 
 module.exports = sequelize.define("Book", {
     ISBN: {
@@ -26,5 +27,14 @@ module.exports = sequelize.define("Book", {
     ReleaseDateBo: Sequelize.STRING(50),
     PriceBo: Sequelize.FLOAT(),
     CoverBo: Sequelize.STRING(50),
-    CopiesNumberBoo: Sequelize.INTEGER()
-})
+    DescriptionBo: Sequelize.STRING(),
+    PageCountBo: Sequelize.INTEGER(11),
+    BorrowedStatusBo: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: false,
+    },
+    createdAt: Sequelize.DATE,
+    updatedAt: Sequelize.DATE,
+}, { freezeTableName: true })
+
+

@@ -1,4 +1,5 @@
 const Sequelize = require('sequelize')
+const {sequelize} = require('../config/sequelizeModule')
 
 module.exports = sequelize.define("Category", {
     IDCategory: {
@@ -8,4 +9,6 @@ module.exports = sequelize.define("Category", {
         allowNull: false  
     },
     NameCa: Sequelize.STRING(50),
-})
+    createdAt: Sequelize.DATE,
+    updatedAt: Sequelize.DATE,
+}, { freezeTableName: true })

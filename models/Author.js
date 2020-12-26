@@ -1,4 +1,5 @@
 const Sequelize = require('sequelize')
+const {sequelize} = require('../config/sequelizeModule')
 
 module.exports = sequelize.define("Author", {
     IDAuthor: {
@@ -8,4 +9,8 @@ module.exports = sequelize.define("Author", {
         allowNull: false  
     },
     NameAu: Sequelize.STRING(50),
-})
+    createdAt: Sequelize.DATE,
+    updatedAt: Sequelize.DATE,
+ 
+}, { freezeTableName: true })
+

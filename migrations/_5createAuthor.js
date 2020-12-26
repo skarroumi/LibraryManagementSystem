@@ -12,7 +12,7 @@ module.exports = {
     NameAu: Sequelize.STRING(50),
   createdAt: Sequelize.DATE,
   updatedAt: Sequelize.DATE,
-   })
+   }, { freezeTableName: true })
   },
 
   down: async (queryInterface, Sequelize) => {

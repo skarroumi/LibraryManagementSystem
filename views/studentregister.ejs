@@ -3,10 +3,10 @@
         <h4>AUI Library Management System</h4>
       <div class="card card-body">
         <h1 class="text-center mb-3">
-          <i class="fas fa-user-plus"></i> Register
+          <i class="fas fa-user-plus"></i> Student Registration
         </h1>
-        
-        <form action="/users/register" method="POST">
+        <%- include('partials/messages'); %>
+        <form action="/users/student/register" method="POST">
           <div class="form-group">
             <label for="name">Name</label>
             <input
@@ -75,7 +75,7 @@
             Register
           </button>
         </form>
-        <p class="lead mt-4">Have An Account? <a href="/users/login">Login</a></p>
+        <p class="lead mt-4">Have An Account? <a href="/users/student/login">Login</a></p>
       </div>
     </div>
   </div>

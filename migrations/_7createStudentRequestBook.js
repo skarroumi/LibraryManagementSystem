@@ -12,7 +12,7 @@ module.exports = {
       },
     ISBN: {
         type: Sequelize.STRING(50),
-        allowNull: false, 
+        allowNull: true,
         references: {
             model: 'Book',
             key: 'ISBN'
@@ -34,9 +34,10 @@ module.exports = {
             key: 'IDRequest'
         }
     },
+    DescRequest: Sequelize.STRING(200),
   createdAt: Sequelize.DATE,
   updatedAt: Sequelize.DATE,
-   })
+   }, { freezeTableName: true })
   },
 
   down: async (queryInterface, Sequelize) => {

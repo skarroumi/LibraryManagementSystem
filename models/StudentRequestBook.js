@@ -1,4 +1,5 @@
 const Sequelize = require('sequelize')
+const {sequelize} = require('../config/sequelizeModule')
 
 module.exports = sequelize.define("StudentRequestBook", {
     IDStudentRequestBook: {
@@ -9,7 +10,7 @@ module.exports = sequelize.define("StudentRequestBook", {
       },
     ISBN: {
         type: Sequelize.STRING(50),
-        allowNull: false, 
+        allowNull: true,
         references: {
             model: 'Book',
             key: 'ISBN'
@@ -31,4 +32,7 @@ module.exports = sequelize.define("StudentRequestBook", {
             key: 'IDRe'
         }
     },
-})
+    DescRequest: Sequelize.STRING(200),
+    createdAt: Sequelize.DATE,
+    updatedAt: Sequelize.DATE,
+}, { freezeTableName: true })

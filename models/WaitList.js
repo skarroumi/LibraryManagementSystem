@@ -1,4 +1,5 @@
 const Sequelize = require('sequelize')
+const {sequelize} = require('../config/sequelizeModule')
 
 module.exports = sequelize.define("WaitList", {
     IDWaitList: {
@@ -15,4 +16,6 @@ module.exports = sequelize.define("WaitList", {
             key: 'ISBN'
         }
     },
-})
+    createdAt: Sequelize.DATE,
+    updatedAt: Sequelize.DATE,
+}, { freezeTableName: true })
