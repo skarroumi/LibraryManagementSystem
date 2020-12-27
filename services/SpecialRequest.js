@@ -4,43 +4,53 @@ const StudentRequestBook = require('../models/StudentRequestBook')
 const {updateBookBorrowStatus} = require('./Book')
 
 
-//create borrow request (only student not prohibited by the managers(have AccessStatusSt = true) can submit a request to borrow a book)
+//borrow book function
 function borrowBook(studentId, bookId, cb){
     let reqId = 1
     try{
-        (Student.findOne({ where: { IDStudent: studentId, AccessStatusSt: true }}) && Book.findOne({ where: { ISBN: bookId, BorrowedStatusBo: false }})).then(student => {
-                StudentRequestBook.create({ ISBN: bookId, IDStudent: studentId, IDRequest: reqId})
-                updateBookBorrowStatus(bookId, true, () => {
-
-                })
-        }).catch(err=>{cb(err,null)})
+        const borrowAuth = (Student.findOne({ where: { IDStudent: studentId, AccessStatusSt: true }}) && Book.findOne({ where: { ISBN: bookId, BorrowedStatusBo: false }}))
+        if (borrowAuth.length == 0){
+            cb(null, false)
+        } else {
+            updateBookBorrowStatus(bookId, true, () => {
+            })
+            StudentRequestBook.create({ ISBN: bookId, IDStudent: studentId, IDRequest: reqId}).then(studentRequest => {
+                cb(null,studentRequest)
+            }).catch(err=>{cb(err,null)})
+        }
     }catch{
         cb(error)
     }
 }
 
-
-//retrun request will flag the book as not borrowed and delete it from the StudentRequestBook association
+//return book function
 function returnBook(studentId, bookId, cb){
     let borReqCode = 1
+    if (row = StudentRequestBook.findOne({ where: { IDStudent: studentId, ISBN: bookId, IDRequest: borReqCode }}))
     try{
-        StudentRequestBook.findOne({ where: {IDStudent: studentId, ISBN: bookId, IDRequest: borReqCode}}).then(returnReq => {
-                updateBookBorrowStatus(bookId, false, () => {
-                })
-                returnReq.destroy()  
-        }).catch(err=>{cb(err,null)})
-    }catch{
-        cb(error)
-    }
+        updateBookBorrowStatus(bookId, false, () => {
+        })
+        StudentRequestBook.destroy({
+            where: {
+                IDStudent: studentId, ISBN: bookId, IDRequest: borReqCode
+            }
+        })
+}catch(error){
+    cb(error)
+}
+    
 }
 
-
+//create unavailability request (special request) Function
 //create unavailability Request: doesn't require the ISBN of the book, because student will have to write the name of the book in the description
+
 function unavailabilityRequest(studentId, desc, cb){
     let unavReqCode = 3
     if (Student.findOne({ where: { IDStudent: studentId, AccessStatusSt: true } })){
         try{
-            StudentRequestBook.create({IDStudent: studentId, IDRequest: unavReqCode, DescRequest: desc}).catch(err=>{cb(err,null)})
+            StudentRequestBook.create({IDStudent: studentId, IDRequest: unavReqCode, DescRequest: desc}).then(specialReq => {
+                cb(null,specialReq)
+            }).catch(err=>{cb(err,null)})
         }catch{
             cb(error)
         }

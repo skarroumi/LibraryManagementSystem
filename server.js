@@ -2,6 +2,7 @@ if (process.env.NODE_ENV !== 'production'){
     require('dotenv').config()
 }
 const axios = require('axios')
+const jwt = require('jsonwebtoken')
 const passport = require('passport')
 const fetch = require('node-fetch')
 const express = require('express')
@@ -9,7 +10,8 @@ const app = express()
 const expressLayouts = require('express-ejs-layouts')
 const flash = require('connect-flash')
 const session = require('express-session')
-
+app.use(express.urlencoded({ extended: false}))
+app.use(express.json())
 app.set('view engine', 'ejs')
 app.use(express.urlencoded({ extended: false}))
 app.set('views', __dirname + '/views')
@@ -74,12 +76,6 @@ app.post('/bor',(req,res,next)=>{
 
 
 
-
-app.get('/apitest',(req,res,next)=>{
-    const isbnC = req.param('isbnC');
-    //console.log(isbnC)
-    getBookInfo(isbnC,(error,result)=>{if (error) {return res.send();} res.send(result)})
-})
 //--------------------------------TEST SERVICES-----------------------------------------------------------
 
 
@@ -92,12 +88,17 @@ app.get('/apitest',(req,res,next)=>{
 
 const indexRouter = require('./routes/index')
 app.use('/', indexRouter)
-const bookRouter = require('./routes/books')
-app.use('/books', bookRouter)
-const requestRouter = require('./routes/requests')
-app.use('/requests', requestRouter)
-const userRouter = require('./routes/users')
+
+const bookRouter = require('./routes/Book')
+app.use('/book', bookRouter)
+
+const requestRouter = require('./routes/Request')
+app.use('/request', requestRouter)
+
+const userRouter = require('./routes/User')
+app.use('/user', userRouter)
+
 const { studentRegister } = require('./services/User')
-app.use('/users', userRouter)
+
 
 
