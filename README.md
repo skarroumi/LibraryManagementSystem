@@ -1,6 +1,6 @@
 # LibraryManagementSystem - NodeJS / ExpressJS
 This is the server-side of an application for Library Management System for Al Akhawayn University following MVC.
-
+It is written in NodeJS and ExpressJS arranging MySQL, Sequelize, REST and JWT.
 
 ## Requirements
 
