@@ -54,4 +54,25 @@ o High availability must be ensured and no SPoF should be found
 
 ## Architecture
 ![PhysicalArchitecture](https://user-images.githubusercontent.com/42331845/103322634-23443600-4a3f-11eb-8871-5df3b3fd89d9.png)
+
 ## Design
+
+### Class Diagrams
+
+o Model Class Diagram
+
+![Model Class Diagram](https://user-images.githubusercontent.com/42331845/103323449-2ccf9d00-4a43-11eb-80b6-3d20922a38b6.png)
+
+o Models and Services Class Diagram
+
+![Models and Services Class Diagram](https://user-images.githubusercontent.com/42331845/103323450-2e00ca00-4a43-11eb-9bb3-49cf78bfb353.png)
+
+### Sequence Diagrams
+
+o Data-driven Sequence Diagram
+
+![Data-driven Sequence Diagram](https://user-images.githubusercontent.com/42331845/103323447-2c370680-4a43-11eb-9752-56c2585e4a65.png)
+
+o Service-driven Sequence Diagram
+
+![Service-driven Sequence Diagram](https://user-images.githubusercontent.com/42331845/103323451-2e996080-4a43-11eb-9e0c-77f1429f0c12.png)
