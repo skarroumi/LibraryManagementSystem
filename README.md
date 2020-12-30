@@ -65,22 +65,21 @@ book or the waitlist data.
 ## Architecture
 ![PhysicalArchitecture](https://user-images.githubusercontent.com/42331845/103322634-23443600-4a3f-11eb-8871-5df3b3fd89d9.png)
 
++ Logical Architecture - Inside and Application Server
+![Architecture-Logical](https://user-images.githubusercontent.com/42331845/103325441-25f95800-4a4c-11eb-8495-0dcebd725095.png)
+
 ## Design
 
 ### Class Diagrams
-
 + Model Class Diagram
 ![Model Class Diagram](https://user-images.githubusercontent.com/42331845/103323449-2ccf9d00-4a43-11eb-80b6-3d20922a38b6.png)
-
 
 + Models and Services Class Diagram
 ![Models and Services Class Diagram](https://user-images.githubusercontent.com/42331845/103323450-2e00ca00-4a43-11eb-9bb3-49cf78bfb353.png)
 
 ### Sequence Diagrams 
-
 + Data-driven Sequence Diagram
 ![Data-driven Sequence Diagram](https://user-images.githubusercontent.com/42331845/103323447-2c370680-4a43-11eb-9752-56c2585e4a65.png)
-
 
 + Service-driven Sequence Diagram
 ![Service-driven Sequence Diagram](https://user-images.githubusercontent.com/42331845/103323451-2e996080-4a43-11eb-9e0c-77f1429f0c12.png)
