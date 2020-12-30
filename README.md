@@ -53,5 +53,5 @@ o High availability must be ensured and no SPoF should be found
 - Integration: The architecture of the website should allow for usage of external web service to help managers insert books information or add books cover images by simply giving the ISBN of the book.
 
 ## Architecture
-
+![PhysicalArchitecture](https://user-images.githubusercontent.com/42331845/103322634-23443600-4a3f-11eb-8871-5df3b3fd89d9.png)
 ## Design
