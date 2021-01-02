@@ -1,8 +1,7 @@
-
-const { ensureAuthenticatedStudent, ensureAuthenticatedManager } = require('../config/auth')
 const express = require('express')
 const router = express.Router()
 const UserController = require('../controllers/UserController')
+const {auth, authM} = require('../controllers/verifyToken')
 
 
 //student register route

@@ -1,23 +1,35 @@
-const Sequelize = require('sequelize')
-const {sequelize} = require('../config/sequelizeModule')
-
-module.exports = sequelize.define("Student", {
+module.exports = (sequelize, DataTypes) => {
+const Student = sequelize.define("Student", {
     IDStudent: {
-        type: Sequelize.STRING(5),
+        type: DataTypes.STRING(5),
         allowNull: false,
         primaryKey: true,    
     },
-    NameSt: Sequelize.STRING(50),
-    DivisionSt: Sequelize.STRING(50),
-    EmailSt: Sequelize.STRING(50),
-    PasswordSt: Sequelize.STRING(200),
+    NameSt: DataTypes.STRING(50),
+    DivisionSt: DataTypes.STRING(50),
+    EmailSt: DataTypes.STRING(50),
+    PasswordSt: DataTypes.STRING(200),
     AccessStatusSt: {
-        type: Sequelize.BOOLEAN,
+        type: DataTypes.BOOLEAN,
         allowNull: false,
         defaultValue: true,
     },
-    createdAt: Sequelize.DATE,
-    updatedAt: Sequelize.DATE,
+    createdAt: DataTypes.DATE,
+    updatedAt: DataTypes.DATE,
 }, { freezeTableName: true })
 
+Student.associate = models => {
+    Student.hasMany(models.WaitList, {
+        as: 'Student', foreignKey: 'IDStudent'
+    })
+}
 
+Student.associate = models => {
+    Student.hasMany(models.Request, {
+        as: 'Student', foreignKey: 'IDStudent'
+    })
+}
+    return Student
+    }
+    
+    

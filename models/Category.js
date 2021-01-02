@@ -1,14 +1,20 @@
-const Sequelize = require('sequelize')
-const {sequelize} = require('../config/sequelizeModule')
-
-module.exports = sequelize.define("Category", {
+module.exports = (sequelize, DataTypes) => {
+const Category = sequelize.define("Category", {
     IDCategory: {
-        type: Sequelize.INTEGER(11),
+        type: DataTypes.INTEGER(11),
         primaryKey: true,
         autoIncrement: true,
         allowNull: false  
     },
-    NameCa: Sequelize.STRING(50),
-    createdAt: Sequelize.DATE,
-    updatedAt: Sequelize.DATE,
+    NameCa: DataTypes.STRING(50),
+    createdAt: DataTypes.DATE,
+    updatedAt: DataTypes.DATE,
 }, { freezeTableName: true })
+
+Category.associate = models => {
+    Category.hasMany(models.Book, {
+        as: 'Category', foreignKey: 'IDCategory'
+    })
+}
+return Category
+}

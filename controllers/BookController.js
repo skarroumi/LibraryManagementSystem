@@ -4,6 +4,7 @@ const BookService = require('../services/Book')
 //All Books 
 book_get_all = (req, res) => {
     BookService.allBooks((error,response)=>{if(error){return res.send(error)} res.send(response)})
+   
 }
 
 //All borrowed Books  
@@ -29,6 +30,7 @@ book_add_new_post = (req, res) => {
 book_get_one = (req,res)=>{
     const bookId = req.param('isbn');
     BookService.uniqueBookInfo(bookId, (error,response)=>{if(error){return res.send(error)} res.send(response)})
+   
 }
 
 //delete book 
@@ -86,7 +88,12 @@ book_update_one = (req,res,next)=>{
 
 }
 
+book_search = (req,res)=>{
+    const {isbn, title, author} = req.query
+    BookService.bookSearch(isbn, title, author, (error,response)=>{if(error){return res.send(error)} res.send(response)})
+}
+
 
 module.exports = {
-    book_get_all,book_get_all_borrowed, book_add_new_post, book_get_one, book_delete_one, book_update_one, book_add_new_post_autofill
+    book_get_all,book_get_all_borrowed, book_add_new_post, book_get_one, book_delete_one, book_update_one, book_add_new_post_autofill, book_search
 }

@@ -1,93 +1,91 @@
-const Student = require('../models/Student')
-const passport = require('passport')
+const Models = require('../models')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const UserService = require('../services/User')
+const Joi = require('@hapi/joi')
 
+
+//Register Validation
+const studentModelRegistration = Joi.object({
+    id: Joi.string().min(5).max(5).required(),
+    name: Joi.string().required(),
+    email: Joi.string().required().email(),
+    division: Joi.string().required(),
+    password: Joi.string().required(),
+    password2: Joi.string().valid(Joi.ref('password')).required()
+})
+
+//Student Login validation
+const studentModelLogin = Joi.object({
+    email: Joi.string().required().email(),
+    password: Joi.string().required(),
+})
+
+//Manager Login validation
+const managerModelLogin = Joi.object({
+    username: Joi.string().required(),
+    password: Joi.string().required(),
+})
 
 //student register 
 studentRegisterPost = (req, res) => {
-    const {id, name, email, division,accessStaus, password, password2} = req.body
-    let errors = []
-    
-        //check required fields
-    if(!id || !name || !email || !division || !password || !password2) {
-        errors.push({ msg: 'Please fill in all fields'})
-    }
-    
-        //check passwords match
-    if (password !== password2){
-        errors.push({msg: 'Passwords do not match'})
-    }
-        //check password length
-    if(password.length < 6){
-        errors.push({msg: 'Password should be at least 6 characters'})
-    }
-    if(errors.length > 0){
-        res.render('studentregister', {
-            errors, 
-            id,
-            name, 
-            email, 
-            division, 
-            password, 
-            password2
-        })
-    } else {
-            Student.findOne({ where: { IDStudent: 'id' } }).then(student => {
-                if (student){
-                    errors.push({ msg: 'Student already registered'})
-                    res.render('studentregister', {
-                        errors, 
-                        id,
-                        name,
-                        division, 
-                        email, 
-                        password, 
-                        password2
-                    })
-            }  else {
-                //create student buffer object with plain text passwotf
-                 const newStudent = new Student({ IDStudent: id, NameSt:name, EmailSt:email, DivisionSt:division,  PasswordSt: password})
-    
-                 bcrypt.genSalt(10, (err, salt) => 
-                bcrypt.hash(newStudent.PasswordSt, salt, (err, hash) => {
-                if(err) throw err;
-                newStudent.PasswordSt = hash
+const {id, name, email, division, password, password2} = req.body
 
-                //Register user using the register function in the User Service
-                UserService.studentRegister(newStudent.IDStudent, newStudent.NameSt, newStudent.DivisionSt, newStudent.EmailSt, newStudent.PasswordSt,  (error,response)=>{if(error){return res.send(error)} res.send(response)})
-                
-                //req.flash('success_msg', 'Registration successful')
-                //res.redirect('login')
-                }))
-                
-            }
+    //Validate the data
+    const {error} = studentModelRegistration.validate(req.body)
+    if(error) return res.status(400).send(error.details[0].message)
+
+    //Register user using the register function in the User Service
+    UserService.studentRegister(id, name, division, email, password,  (error,createdStudent)=>{if(error){return res.send(error)} res.send(createdStudent)})        
             
-            })
-              
-    }
 }
 
 //student login
-studentLoginPost = (req, res, next) => {
-    useremail = req.body.email
-    userpassword = req.body.password
-    UserService.studentLogin(useremail, userpassword, (error,response)=>{if(error){return res.send(error)} res.send(response)})
+studentLoginPost = (req, res) => {
+    const {email, password} = req.body
+
+    //Validate the data
+    const {error} = studentModelLogin.validate(req.body)
+    if(error) return res.status(400).send(error.details[0].message)
+
+        //Login student with the UserService specific function
+        UserService.studentLogin(email, password, (error,loggedInStudent)=>{
+            if(error){
+                return res.status(400).send(error)
+            } 
+            //create and assign a token
+            const token = jwt.sign({ _email: loggedInStudent.EmailSt }, "fsdhfisudhfisufsdjfbssfefe3243rwer")
+            res.header('auth-token', token).send(token)
+            })  
+    
 }
 
 //manager login
-managerLoginPost = (req, res, next) => {
-    username = req.body.username
-    userpassword = req.body.password
-    UserService.managerLogin(username, userpassword, (error,response)=>{if(error){return res.send(error)} res.send(response)})
+managerLoginPost = (req, res) => {
+    const {username, password} = req.body
+
+    //Validate the data
+    const {error} = managerModelLogin.validate(req.body) 
+    if(error) return res.status(400).send(error.details[0].message)
+
+    //Do loginn in the userService
+    UserService.managerLogin(username, password, (error,loggedInManager)=>{
+        if(error){
+            return res.status(400).send(error)
+        } 
+        //create and assign a token
+        const token = jwt.sign({ _username: loggedInManager.username }, "fsdhfisudhfisufsdjfbssfefe3243rwer")
+        res.header('mauth-token', token).send(token)
+        })  
+ 
+    
 }
 
 //prohibit or authorize a student to borrow books
 managerChangeAcess = (req, res) => {
-    studentId = req.param('studentid')
-    newAccessValue = req.param('accessvalue')
-    UserService.changeAccess(studentId, newAccessValue, (error, response) =>{if(error){ return res.send(error)} res.send(response)})
+    studentId = req.body.studentid
+    newAccessValue = req.body.accessvalue
+    UserService.changeAccess(studentId, newAccessValue, (error, accessResult) =>{if(error){ return res.send(error)} res.send(accessResult)})
 }
 
 
