@@ -6,28 +6,18 @@ const WaitList = sequelize.define("WaitList", {
         autoIncrement: true,
         allowNull: false   
     },
-    forBook: {
-        type: DataTypes.STRING(50),
-        allowNull: false,
-        references: {
-            model: 'Book',
-            key: 'ISBN'
-        }
-    },
     createdAt: DataTypes.DATE,
     updatedAt: DataTypes.DATE,
 }, { freezeTableName: true })
 
 WaitList.associate = models => {
     WaitList.hasMany(models.Student, {
-        foreignKey: 'IDWaitList'
-    })
-}
-
-WaitList.associate = models => {
+        as: 'WaitList', foreignKey: 'IDWaitList'
+    }),
     WaitList.belongsTo(models.Book, {
         as: 'Book', foreignKey: 'ISBN'
     })
 }
+
 return WaitList
 }

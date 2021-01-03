@@ -78,18 +78,22 @@ function showSpecialRequest(cb){
 
 }
 
-function waitListHandling(studentId, listId, cb){
-    if (!Models.WaitList.findOne( { IDWaitList: listId, IDStudent: studentId })){
+function waitListHandling(studentId, booklist, cb){
     try {
-        StudentWaitList.create({ IDWaitList: listId, IDStudent: studentId }).then(listReq => {
-            cb(null,listReq)
-        }).catch(err=>{cb(err,null)})
+        Models.WaitList.findOne( { where: {ISBN: booklist} }).then(list => {
+            if(list){
+                if (Models.Student.update(
+                    { IDWaitList:  list.IDWaitList},
+                    { where: { IDStudent: studentId }}).catch(err=>{cb(err,null)})) {
+                        cb(null, list)
+                    }
+            }
+        })
     } catch {
         cb(error)
     }
-} else {
-    cb(null, false)
-}
+
+
 }
 
 

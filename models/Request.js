@@ -15,14 +15,13 @@ module.exports = (sequelize, DataTypes) => {
     Request.associate = models => {
         Request.belongsTo(models.Student, {
             foreignKey: 'IDStudent'
-        })
-    }
-    Request.associate = models => {
+        }),
         Request.belongsTo(models.Book, {
             foreignKey: 'ISBN',
             allowNull: true
         })
     }
+    
     return Request
     }
     

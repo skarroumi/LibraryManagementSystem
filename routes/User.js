@@ -13,8 +13,8 @@ router.post('/student/login', UserController.studentLoginPost)
 //manager login route
 router.post('/manager/login', UserController.managerLoginPost)
 
-//prohibit or authorize a student to borrow books
-router.post('/manager/changeaccess', UserController.managerChangeAcess)
+//prohibit or authorize a student to borrow books (manager's privilege)
+router.put('/manager/changeaccess', authM, UserController.managerChangeAcess)
 
 
 module.exports = router

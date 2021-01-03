@@ -5,7 +5,7 @@ const Book = sequelize.define("Book", {
         allowNull: false,
         primaryKey: true,    
     },
-    TitleBo: DataTypes.STRING(50),
+    TitleBo: DataTypes.STRING(200),
     ReleaseDateBo: DataTypes.STRING(50),
     PriceBo: DataTypes.FLOAT(),
     CoverBo: DataTypes.STRING(50),
@@ -22,9 +22,7 @@ const Book = sequelize.define("Book", {
 Book.associate = models => {
     Book.belongsTo(models.Author, {
         foreignKey: 'IDAuthor'
-    })
-}
-Book.associate = models => {
+    }),
     Book.belongsTo(models.Category, {
         foreignKey: 'IDCategory'
     })

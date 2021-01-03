@@ -49,20 +49,29 @@ function studentLogin(email, password, cb){
     }
 }
 
-//authenticate manager
+//authenticate manager (if there are already 5 connected admins then refuse request)
 function managerLogin(username, password, cb){
     try{
         Models.Manager.findOne({ where: { UsernameMa: username }})
         .then(manager => {
             if(manager){
-            bcrypt.compare(password, manager.PasswordMa, (err, isMatch) => {
-                if (err) throw err
-                if (isMatch){  
-                    cb(null,manager)
-                } else {
-                    cb(null, false)
-                }
-            })
+                //Check if there are already 5 connected managers, if so, then don't let this manager connects
+                Models.Manager.findAndCountAll({ where: { ConnectionStatusMa: true }}).then(countM => {
+                    if (countM.count < 5 ){
+                        bcrypt.compare(password, manager.PasswordMa, (err, isMatch) => {
+                            if (err) throw err
+                            if (isMatch){  
+                                cb(null,manager)
+                            } else {
+                                cb(null, false)
+                            }
+                        })
+                    }
+                    else {
+                        cb(null, false)  
+                    }
+                })
+            
         } else {
             cb(null, false)
         }

@@ -36,7 +36,7 @@ const {id, name, email, division, password, password2} = req.body
     if(error) return res.status(400).send(error.details[0].message)
 
     //Register user using the register function in the User Service
-    UserService.studentRegister(id, name, division, email, password,  (error,createdStudent)=>{if(error){return res.send(error)} res.send(createdStudent)})        
+    UserService.studentRegister(id, name, division, email, password,  (error,createdStudent)=>{if(error){return res.status(400).json({ status: 400, message: error})} res.status(200).json({ status: 200, message: "true"})})
             
 }
 
@@ -55,7 +55,8 @@ studentLoginPost = (req, res) => {
             } 
             //create and assign a token
             const token = jwt.sign({ _email: loggedInStudent.EmailSt }, "fsdhfisudhfisufsdjfbssfefe3243rwer")
-            res.header('auth-token', token).send(token)
+            res.status(200).header('auth-token', token).json({ status: 200, message: token})
+            
             })  
     
 }
@@ -75,7 +76,7 @@ managerLoginPost = (req, res) => {
         } 
         //create and assign a token
         const token = jwt.sign({ _username: loggedInManager.username }, "fsdhfisudhfisufsdjfbssfefe3243rwer")
-        res.header('mauth-token', token).send(token)
+        res.status(200).header('mauth-token', token).json({ status: 200, message: token})
         })  
  
     
@@ -85,7 +86,7 @@ managerLoginPost = (req, res) => {
 managerChangeAcess = (req, res) => {
     studentId = req.body.studentid
     newAccessValue = req.body.accessvalue
-    UserService.changeAccess(studentId, newAccessValue, (error, accessResult) =>{if(error){ return res.send(error)} res.send(accessResult)})
+    UserService.changeAccess(studentId, newAccessValue, (error, accessResult) =>{if(error){ return res.status(400).json({ status: 400, message: error})} res.status(200).json({ status: 200, message: "true"})})
 }
 
 

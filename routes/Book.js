@@ -4,29 +4,29 @@ const BookController = require('../controllers/BookController')
 const {auth, authM} = require('../controllers/verifyToken')
 
 
-//All Books route 
-router.get('/all', BookController.book_get_all)
+//All Books route (for students to display all books in the library)
+router.get('/all', auth, BookController.book_get_all)
 
-//One Book Information route
-router.get('/unique', BookController.book_get_one)
+//One Book Information route (display information of one specific book)
+router.get('/unique',auth,  BookController.book_get_one)
 
-//Search for books
-router.get('/search', BookController.book_search)
+//Search for books (search for books using ISBN, author or title)
+router.get('/search',auth, BookController.book_search)
 
-//Add New Book Route
-router.post('/new', BookController.book_add_new_post)
+//Add New Book Route (for the manager to add a new book)
+router.post('/new',authM, BookController.book_add_new_post)
 
 //delete book route
-router.post('/delete', BookController.book_delete_one)
+router.delete('/delete',authM, BookController.book_delete_one)
 
-//update book information route
-router.post('/update', BookController.book_update_one)
+//update book information route (update multiple book information[author, category, description....])
+router.put('/update',authM, BookController.book_update_one)
 
-//All borrowed Books route --------------------------------[I need to add the overdue]
-router.get('/borrowed', BookController.book_get_all_borrowed)
+//All borrowed Books route (manager can see which books are borrowed at the moment)
+router.get('/borrowed',authM, BookController.book_get_all_borrowed)
 
-//Fill in Book Information By sending ISBN to googleapis route
-router.get('/new/autofill', BookController.book_add_new_post_autofill)
+//Fill in Book Information By sending ISBN to googleapis route (returns specif information for a book given only its ISBN)
+router.get('/new/autofill',authM, BookController.book_add_new_post_autofill)
 
 
 module.exports = router

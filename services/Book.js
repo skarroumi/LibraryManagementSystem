@@ -2,52 +2,51 @@ const Models = require('../models')
 const fetch = require('node-fetch')
 
 
-//All Books Function
+//All Books Function 
 function allBooks(cb){
     try{
         Models.Book.findAll().then(books => {
             cb(null,books)
-        }).catch(err=>{cb(err,null)})
+        })
     }catch{
         cb(error)
     }
 }
 
-//Book Search 
-function bookSearch(isbn, title, author, cb){
+//Book Search  
+function bookSearch(isbn, title, category,author, cb){
     if (isbn){
-        Models.Book.findOne({ where: { ISBN: isbn}}).then(bookSearchResult => {
-            if(bookSearchResult){
-                //res.send(bookSearchResult)
+        Models.Book.findAll({ where: { ISBN: isbn}}).then(bookSearchResult => {
                 cb(null, bookSearchResult)
-            } else {
-                //res.send('No Book Matches The ISBN specified')
-                cb(null, false)
-            }
         })
     }
     else if(title){
-        Models.Book.findOne({ where: { TitleBo: title}}).then(bookSearchResult => {
-            if(bookSearchResult){
-                //res.send(bookSearchResult)
+        Models.Book.findAll({ where: { TitleBo: title}}).then(bookSearchResult => {
                 cb(null, bookSearchResult)
-            } else {
-                //res.send('No Book Matches The Title specified')
-                cb(null, false)
-            }
         })
+    }
+    else if (category){
+         Models.Book.findAll({
+            include: [{
+              model: Models.Category,
+              where: {NameCa: category}
+             }]
+          }).then(bookSearchResult => {
+            cb(null, bookSearchResult)
+          });
     }
     else if (author){
-        Models.Book.findOne({ where: { Author: author}, include: [{model: AuthorModel, required: true, where: {NameAu: author}}]}).then(bookSearchResult => {
-            if(bookSearchResult){
-                //res.send(bookSearchResult)
-                cb(null, bookSearchResult)
-            } else {
-                //res.send('No Book Matches The Title specified')
-                cb(null, false)
-            }
-        })
-    }
+        Models.Book.findAll({
+           include: [{
+             model: Models.Author,
+             where: {NameAu: author}
+            }]
+         }).then(bookSearchResultAU => {
+           cb(null, bookSearchResultAU)
+         });
+   } else {
+       cb(null, false)
+   }
 }
 
 //All borrowed books Function
@@ -55,13 +54,13 @@ function borrowedBooks(cb){
     try{
         Models.Book.findAll({ where: { BorrowedStatusBo: true }}).then(books => {
             cb(null,books)
-        }).catch(err=>{cb(err,null)})
+        })
     }catch{
         cb(error)
     }
 }
 
-//One Book Information Function
+//One Book Information Function 
 function uniqueBookInfo(isbn, cb){
     try{
         Models.Book.findOne({ where: { ISBN: isbn }}).then(book => {
@@ -75,13 +74,13 @@ function uniqueBookInfo(isbn, cb){
 //Add New Book Function
 function addBook(bookISBN, bookAuthor, bookCategory, bookTitleBo, bookReleaseDateBo, bookPriceBo, bookCoverBo, bookDesc, pageNumber,cb){
     try{
-        Models.Book.create({ISBN: bookISBN, Author: bookAuthor, Category: bookCategory, TitleBo: bookTitleBo, ReleaseDateBo: bookReleaseDateBo, PriceBo: bookPriceBo, CoverBo:bookCoverBo,DescriptionBo:bookDesc, PageCountBo: pageNumber }).then(bookAddRes=>{cb(null, bookAddRes)}).catch(err=>{cb(err,null)})
+        Models.Book.create({ISBN: bookISBN, IDAuthor: bookAuthor, IDCategory: bookCategory, TitleBo: bookTitleBo, ReleaseDateBo: bookReleaseDateBo, PriceBo: bookPriceBo, CoverBo:bookCoverBo,DescriptionBo:bookDesc, PageCountBo: pageNumber }).then(bookAddRes=>{cb(null, bookAddRes)}).catch(err=>{cb(err,null)})
     }catch(error){
         cb(error)
     }
 }
 
-//delete book Function
+//delete book Function  
 function deleteBook(bookISBN, cb){
     try{
         Models.Book.findOne({ where: { ISBN: bookISBN }}).then(book => {
@@ -109,9 +108,8 @@ function getBookInfo(isbnC,cb){
       bookCover : result.items[0].volumeInfo.imageLinks.smallThumbnail,
       bookPage : result.items[0].volumeInfo.pageCount
       }
-    
     cb(null,concernedValues)})
-  .catch(error => cb(error,null));
+  .catch(error => cb(error,null))
  
 }
 

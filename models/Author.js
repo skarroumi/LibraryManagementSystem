@@ -9,9 +9,7 @@ const Author = sequelize.define("Author", {
     NameAu: DataTypes.STRING(50),
     createdAt: DataTypes.DATE,
     updatedAt: DataTypes.DATE,
-
 }, { freezeTableName: true })
-
 
 Author.associate = models => {
     Author.hasMany(models.Book, {

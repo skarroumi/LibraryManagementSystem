@@ -18,17 +18,17 @@ const Student = sequelize.define("Student", {
     updatedAt: DataTypes.DATE,
 }, { freezeTableName: true })
 
-Student.associate = models => {
-    Student.hasMany(models.WaitList, {
-        as: 'Student', foreignKey: 'IDStudent'
-    })
-}
 
 Student.associate = models => {
     Student.hasMany(models.Request, {
         as: 'Student', foreignKey: 'IDStudent'
+    }),
+    Student.belongsTo(models.WaitList, {
+        foreignKey: 'IDWaitList',
+        allowNull: true
     })
 }
+
     return Student
     }
     
