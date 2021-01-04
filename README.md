@@ -12,7 +12,7 @@ recruited employee. The application should not have more than 5 active
 managers.
   + Student: Any AUI student with an active ID.
   
-+ For Managers, the application shall be allowed the following: 
++ For Managers, the application shall be allowed to perform the following: 
   + Add, Delete, Update Books.
   + Show all the borrowed books, with overdues.
   + Respond to the non-availability requests.
