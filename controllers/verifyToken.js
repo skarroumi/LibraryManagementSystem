@@ -8,7 +8,7 @@ function auth(req, res, next){
         req.user = verified
         next()
     } catch(err){
-        res.status(403).send('Invalid Token')
+        res.status(401).send('Invalid Token')
     }
 }
 
@@ -20,7 +20,7 @@ function authM(req, res, next){
         req.user = verified
         next()
     } catch(err){
-        res.status(403).send('Invalid Token')
+        res.status(401).send('Invalid Token')
     }
 }
 

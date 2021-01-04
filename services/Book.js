@@ -92,26 +92,7 @@ function deleteBook(bookISBN, cb){
 }
 }
 
-//Retrieve book information by giving the ISBN of it as a parameter to an external Web service (googleapis)
-function getBookInfo(isbnC,cb){
-    
-    fetch(`https://www.googleapis.com/books/v1/volumes?q=isbn:${isbnC}`, {method: 'GET'})
-  .then(response => {
-      return response.json()
-    })
-  .then(result => {
-      let concernedValues = {
-      bookTitle : result.items[0].volumeInfo.title,
-      authorName : result.items[0].volumeInfo.authors[0],
-      releaseDate : result.items[0].volumeInfo.publishedDate,
-      bookDescription : result.items[0].volumeInfo.description,
-      bookCover : result.items[0].volumeInfo.imageLinks.smallThumbnail,
-      bookPage : result.items[0].volumeInfo.pageCount
-      }
-    cb(null,concernedValues)})
-  .catch(error => cb(error,null))
- 
-}
+
 
 //----------------------------------------------UPDATES--------------------------------------------->
 //update book Author
@@ -214,7 +195,7 @@ function updateBookDescription(bookISBN, newDesc, cb){
 function updateBookPageCount(bookISBN, newPage, cb){
     try {
         Models.Book.update(
-        { DescriptionBo:  newDesc},
+        { PageCountBo:  newPage},
         { where: { ISBN: bookISBN }}
     ).then(res=>{cb(null, res)}).catch(err=>{cb(err,null)})
 }catch(error){

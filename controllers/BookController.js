@@ -44,7 +44,22 @@ book_delete_one = (req,res)=>{
 //Fill in Book Information By sending ISBN to googleapis
 book_add_new_post_autofill = (req,res)=>{
     const bookId = req.query.isbn
-    BookService.getBookInfo(bookId, (error,returnedData)=>{if(error){return res.status(400).json({ status: 400, message: error})} res.status(200).json({ status: 200, message: returnedData})})
+    fetch(`https://www.googleapis.com/books/v1/volumes?q=isbn:${bookId}`, {method: 'GET'})
+  .then(response => {
+      return response.json()
+    })
+  .then(result => {
+      concernedValues = {
+      bookTitle : result.items[0].volumeInfo.title,
+      authorName : result.items[0].volumeInfo.authors[0],
+      releaseDate : result.items[0].volumeInfo.publishedDate,
+      bookDescription : result.items[0].volumeInfo.description,
+      bookCover : result.items[0].volumeInfo.imageLinks.smallThumbnail,
+      bookPage : result.items[0].volumeInfo.pageCount
+      } })
+      if(error){return res.status(400).json({ status: 400, message: error})} res.status(200).json({ status: 200, message: concernedValues})
+  .catch(error => cb(error,null))
+
 }
 
 //update book information 
